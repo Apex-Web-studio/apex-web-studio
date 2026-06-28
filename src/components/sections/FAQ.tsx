@@ -27,15 +27,15 @@ export function FAQ() {
   return (
     <SectionWrapper id="faq">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-16 text-center md:mb-20">
-          <span className="text-primary mb-3 block font-mono text-xs tracking-[0.15em] uppercase">
+        <div className="mb-10 text-center sm:mb-14 md:mb-20">
+          <span className="text-primary mb-2 block font-mono text-[10px] tracking-[0.15em] uppercase sm:mb-3 sm:text-xs">
             FAQ
           </span>
           <h2
             ref={headingRef}
             className="font-heading font-700 tracking-[-0.02em]"
             style={{
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
               lineHeight: "1.05",
             }}
           >
@@ -47,10 +47,10 @@ export function FAQ() {
           <Accordion className="w-full">
             {FAQ_ITEMS.map((item, index) => (
               <AccordionItem key={index} className="border-border/50">
-                <AccordionTrigger className="py-5 text-left font-[500] tracking-tight hover:no-underline">
+                <AccordionTrigger className="py-4 text-left text-sm font-[500] tracking-tight hover:no-underline sm:py-5 sm:text-base">
                   {item.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-5 text-sm leading-relaxed">
+                <AccordionContent className="text-muted-foreground pb-4 text-xs leading-relaxed sm:pb-5 sm:text-sm">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>

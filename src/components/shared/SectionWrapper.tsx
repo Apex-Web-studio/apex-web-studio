@@ -1,8 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { fadeInUp, viewportConfig } from "@/lib/animations";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SectionWrapperProps {
   children: React.ReactNode;
@@ -17,20 +20,46 @@ export function SectionWrapper({
   id,
   fullWidth = false,
 }: SectionWrapperProps) {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(el, {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: "power3.out",
+        force3D: true,
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          toggleActions: "play none none none",
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <motion.section
+    <section
+      ref={ref}
       id={id}
-      variants={fadeInUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportConfig}
       className={cn(
-        "relative py-20 md:py-28 lg:py-32 xl:py-40",
+        "relative overflow-hidden py-20 md:py-28 lg:py-32 xl:py-40",
         !fullWidth && "mx-auto w-full max-w-7xl px-5 md:px-8 lg:px-12 xl:px-16",
         className,
       )}
     >
       {children}
-    </motion.section>
+    </section>
   );
 }

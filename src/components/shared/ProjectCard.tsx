@@ -111,14 +111,14 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         </div>
 
         {/* Content */}
-        <div className="absolute inset-0 flex flex-col justify-end p-6">
-          <span className="mb-1 font-mono text-xs tracking-[0.1em] text-white/70 uppercase transition-all duration-300 lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
+        <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6">
+          <span className="mb-1 font-mono text-[10px] tracking-[0.1em] text-white/70 uppercase transition-all duration-300 sm:text-xs lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
             {project.category} — {project.year}
           </span>
-          <h3 className="font-heading font-700 mb-2 text-xl tracking-tight text-white transition-all duration-300 md:text-2xl lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
+          <h3 className="font-heading font-700 mb-1 text-base tracking-tight text-white transition-all duration-300 sm:mb-2 sm:text-xl md:text-2xl lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
             {project.title}
           </h3>
-          <p className="max-w-xs text-sm leading-relaxed text-white/75 transition-all duration-500 sm:max-w-sm lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
+          <p className="text-xs leading-relaxed text-white/75 transition-all duration-500 sm:text-sm lg:translate-y-3 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
             {project.description}
           </p>
         </div>

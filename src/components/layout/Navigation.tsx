@@ -20,17 +20,17 @@ export function Navigation() {
           exit={{ y: -30, opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           aria-label="Main navigation"
-          className="border-border/50 bg-background/70 fixed top-4 right-4 left-4 z-50 mx-auto flex max-w-7xl items-center justify-between rounded-2xl border px-6 py-3 backdrop-blur-xl"
+          className="border-border/50 bg-background/70 fixed top-2 right-2 left-2 z-50 mx-auto flex max-w-7xl items-center justify-between rounded-xl border px-4 py-2.5 backdrop-blur-xl sm:top-4 sm:right-4 sm:left-4 sm:rounded-2xl sm:px-6 sm:py-3"
         >
           <a
             href="#"
             aria-label="Apex Web Studio — back to top"
-            className="font-heading font-700 focus-visible:outline-ring text-sm tracking-[0.05em] uppercase focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="font-heading font-700 focus-visible:outline-ring text-xs tracking-[0.05em] uppercase focus-visible:outline-2 focus-visible:outline-offset-2 sm:text-sm"
           >
             APEX
           </a>
 
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center gap-6 md:flex lg:gap-8">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
@@ -47,11 +47,11 @@ export function Navigation() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Follow us on Instagram"
-            className="group bg-primary/10 text-primary hover:bg-primary/20 focus-visible:outline-ring inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-[500] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="group bg-primary/10 text-primary hover:bg-primary/20 focus-visible:outline-ring inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-[500] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
           >
-            <InstagramIcon size={14} />
-            <span className="hidden sm:inline">Instagram</span>
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <InstagramIcon size={12} className="sm:h-3.5 sm:w-3.5" />
+            <span className="xs:inline hidden sm:inline">Instagram</span>
+            <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 sm:h-3.5 sm:w-3.5" />
           </a>
         </motion.nav>
       )}

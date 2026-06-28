@@ -5,7 +5,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollIndicator } from "@/components/shared/ScrollIndicator";
 import { TAGLINE, HERO_SUBTITLE } from "@/constants";
-import { useParallax } from "@/hooks/useParallax";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,7 +13,7 @@ function splitIntoSpans(text: string): string {
     .split(" ")
     .map(
       (word) =>
-        `<span class="inline-block overflow-hidden mr-[0.25em]"><span class="inline-block" style="will-change:transform">${word}</span></span>`,
+        `<span class="inline-block overflow-hidden mr-[0.2em]"><span class="inline-block" style="will-change:transform">${word}</span></span>`,
     )
     .join("");
 }
@@ -25,12 +24,11 @@ export function Hero() {
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const orb1 = useParallax<HTMLDivElement>({ speed: 60, direction: "up" });
-  const orb2 = useParallax<HTMLDivElement>({ speed: 40, direction: "down" });
 
   useEffect(() => {
     const heading = headingRef.current;
-    if (!heading) return;
+    const section = sectionRef.current;
+    if (!heading || !section) return;
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -57,9 +55,8 @@ export function Hero() {
           allInnerSpans,
           {
             y: "110%",
-            rotateX: 15,
             duration: 0.9,
-            stagger: 0.035,
+            stagger: 0.04,
             ease: "power4.out",
             force3D: true,
           },
@@ -86,12 +83,12 @@ export function Hero() {
           "-=0.5",
         );
 
-      gsap.to(sectionRef.current, {
+      gsap.to(section, {
         opacity: 0,
         y: -60,
         ease: "none",
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: "top top",
           end: "70% top",
           scrub: 1,
@@ -105,38 +102,43 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 md:px-8"
+      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 md:px-8"
       aria-label="Hero"
     >
+      {/* Gradient orbs - contained within section overflow-hidden */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden"
+        className="pointer-events-none absolute inset-0 motion-reduce:hidden"
         aria-hidden="true"
       >
         <div
-          ref={orb1}
-          className="absolute -top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full opacity-[0.07] blur-[120px] will-change-transform"
-          style={{ background: "oklch(0.58 0.17 275)" }}
+          className="absolute -top-32 -right-32 h-64 w-64 rounded-full opacity-[0.08] blur-[100px] will-change-transform sm:h-96 sm:w-96 md:-top-48 md:-right-48 md:h-[500px] md:w-[500px]"
+          style={{
+            background: "oklch(0.58 0.17 275)",
+            animation: "float 8s ease-in-out infinite",
+          }}
         />
         <div
-          ref={orb2}
-          className="absolute -bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full opacity-[0.05] blur-[120px] will-change-transform"
-          style={{ background: "oklch(0.58 0.12 300)" }}
+          className="absolute -bottom-32 -left-32 h-64 w-64 rounded-full opacity-[0.05] blur-[100px] will-change-transform sm:h-80 sm:w-80 md:-bottom-48 md:-left-48 md:h-[400px] md:w-[400px]"
+          style={{
+            background: "oklch(0.58 0.12 300)",
+            animation: "float 10s ease-in-out infinite 2s",
+          }}
         />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-6 text-center md:gap-8">
+      <div className="relative z-10 flex flex-col items-center gap-5 text-center sm:gap-6 md:gap-8">
         <div ref={eyebrowRef} className="flex items-center gap-3">
-          <span className="bg-primary h-[1px] w-8" aria-hidden="true" />
-          <span className="text-primary font-mono text-xs tracking-[0.15em] uppercase">
+          <span className="bg-primary h-[1px] w-6 sm:w-8" aria-hidden="true" />
+          <span className="text-primary font-mono text-[10px] tracking-[0.15em] uppercase sm:text-xs">
             Digital Design Agency
           </span>
-          <span className="bg-primary h-[1px] w-8" aria-hidden="true" />
+          <span className="bg-primary h-[1px] w-6 sm:w-8" aria-hidden="true" />
         </div>
 
         <h1
           ref={headingRef}
           className="font-heading leading-[0.95] font-[800] tracking-[-0.03em]"
-          style={{ fontSize: "clamp(2.75rem, 8vw, 7.5rem)" }}
+          style={{ fontSize: "clamp(2.5rem, 10vw, 7.5rem)" }}
         >
           <span data-hero-line>APEX WEB</span>
           <br />
@@ -145,20 +147,20 @@ export function Hero() {
 
         <p
           ref={taglineRef}
-          className="text-foreground max-w-xs text-lg font-[500] sm:text-xl md:max-w-sm md:text-2xl"
+          className="text-foreground max-w-[280px] text-base font-[500] sm:max-w-xs sm:text-lg md:max-w-sm md:text-2xl"
         >
           {TAGLINE}
         </p>
 
         <p
           ref={subtitleRef}
-          className="text-muted-foreground max-w-sm text-sm sm:text-base md:max-w-lg md:text-lg"
+          className="text-muted-foreground max-w-[280px] text-xs sm:max-w-sm sm:text-sm md:max-w-lg md:text-lg"
         >
           {HERO_SUBTITLE}
         </p>
       </div>
 
-      <div className="absolute bottom-10">
+      <div className="absolute bottom-8 sm:bottom-10">
         <ScrollIndicator delay={3.2} />
       </div>
 

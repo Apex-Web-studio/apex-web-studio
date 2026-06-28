@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function PageLoader({ children }: { children: React.ReactNode }) {
   const prefersReducedMotion =
@@ -16,7 +19,10 @@ export function PageLoader({ children }: { children: React.ReactNode }) {
   const nameRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (isComplete) return;
+    if (isComplete) {
+      ScrollTrigger.refresh();
+      return;
+    }
 
     const counter = { val: 0 };
     const tl = gsap.timeline({
@@ -25,7 +31,10 @@ export function PageLoader({ children }: { children: React.ReactNode }) {
           clipPath: "inset(0 0 100% 0)",
           duration: 0.9,
           ease: "power4.inOut",
-          onComplete: () => setIsComplete(true),
+          onComplete: () => {
+            setIsComplete(true);
+            setTimeout(() => ScrollTrigger.refresh(), 100);
+          },
         });
       },
     });

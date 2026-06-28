@@ -21,7 +21,6 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export function Services() {
   const gridRef = useRef<HTMLDivElement>(null);
-
   const headingRef = useTextReveal<HTMLHeadingElement>({
     splitBy: "words",
     stagger: 0.05,
@@ -37,20 +36,18 @@ export function Services() {
     ).matches;
     if (prefersReducedMotion) return;
 
-    const cards = grid.children;
-
     const ctx = gsap.context(() => {
-      gsap.from(cards, {
-        y: 60,
+      gsap.from(grid.children, {
+        y: 50,
         opacity: 0,
-        scale: 0.96,
+        scale: 0.97,
         duration: 0.7,
         stagger: 0.08,
         ease: "power3.out",
         force3D: true,
         scrollTrigger: {
           trigger: grid,
-          start: "top 85%",
+          start: "top 88%",
           toggleActions: "play none none none",
         },
       });
@@ -61,14 +58,17 @@ export function Services() {
 
   return (
     <SectionWrapper id="services">
-      <div className="mb-16 md:mb-20">
-        <span className="text-primary mb-3 block font-mono text-xs tracking-[0.15em] uppercase">
+      <div className="mb-10 sm:mb-14 md:mb-20">
+        <span className="text-primary mb-2 block font-mono text-[10px] tracking-[0.15em] uppercase sm:mb-3 sm:text-xs">
           Services
         </span>
         <h2
           ref={headingRef}
           className="font-heading font-700 max-w-xl tracking-[-0.02em]"
-          style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: "1.05" }}
+          style={{
+            fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
+            lineHeight: "1.05",
+          }}
         >
           Everything you need to stand out online.
         </h2>
@@ -76,23 +76,23 @@ export function Services() {
 
       <div
         ref={gridRef}
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
       >
         {SERVICES.map((service) => (
           <div
             key={service.title}
-            className="group border-border/50 bg-card hover:border-primary/30 relative overflow-hidden rounded-xl border p-8 transition-colors duration-300"
+            className="group border-border/50 bg-card hover:border-primary/30 relative overflow-hidden rounded-xl border p-6 transition-colors duration-300 sm:p-8"
           >
             <div className="bg-primary/5 pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-100" />
 
             <div className="relative">
-              <div className="border-border bg-background text-primary mb-5 flex h-10 w-10 items-center justify-center rounded-lg border transition-transform duration-300 group-hover:scale-110">
+              <div className="border-border bg-background text-primary mb-4 flex h-10 w-10 items-center justify-center rounded-lg border transition-transform duration-300 group-hover:scale-110 sm:mb-5">
                 {iconMap[service.icon]}
               </div>
-              <h3 className="font-heading font-700 mb-3 text-lg tracking-tight">
+              <h3 className="font-heading font-700 mb-2 text-base tracking-tight sm:mb-3 sm:text-lg">
                 {service.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
                 {service.description}
               </p>
             </div>

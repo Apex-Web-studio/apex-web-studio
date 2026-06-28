@@ -37,7 +37,7 @@ export function WhyApex() {
 
     const ctx = gsap.context(() => {
       gsap.from(grid.children, {
-        scale: 0.9,
+        scale: 0.92,
         opacity: 0,
         y: 40,
         duration: 0.7,
@@ -46,7 +46,7 @@ export function WhyApex() {
         force3D: true,
         scrollTrigger: {
           trigger: grid,
-          start: "top 85%",
+          start: "top 88%",
           toggleActions: "play none none none",
         },
       });
@@ -57,25 +57,25 @@ export function WhyApex() {
 
   return (
     <SectionWrapper id="why-apex">
-      <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
+      <div className="grid grid-cols-1 gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-20">
         <div>
-          <span className="text-primary mb-3 block font-mono text-xs tracking-[0.15em] uppercase">
+          <span className="text-primary mb-2 block font-mono text-[10px] tracking-[0.15em] uppercase sm:mb-3 sm:text-xs">
             Why Apex
           </span>
           <h2
             ref={headingRef}
-            className="font-heading font-700 mb-6 tracking-[-0.02em]"
+            className="font-heading font-700 mb-4 tracking-[-0.02em] sm:mb-6"
             style={{
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
               lineHeight: "1.05",
             }}
           >
             Built on craft, driven by vision.
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-lg text-base leading-[1.7] md:text-lg">
+          <p className="text-muted-foreground mb-6 max-w-lg text-sm leading-[1.7] sm:mb-8 sm:text-base md:text-lg">
             {PHILOSOPHY}
           </p>
-          <div ref={bulletRef} className="space-y-4">
+          <div ref={bulletRef} className="space-y-3 sm:space-y-4">
             {[
               "Obsessive attention to every pixel and interaction",
               "Strategy-first approach grounded in real user research",
@@ -84,22 +84,24 @@ export function WhyApex() {
             ].map((item) => (
               <div key={item} className="flex items-start gap-3">
                 <span className="bg-primary mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full" />
-                <span className="text-muted-foreground text-sm">{item}</span>
+                <span className="text-muted-foreground text-xs sm:text-sm">
+                  {item}
+                </span>
               </div>
             ))}
           </div>
         </div>
 
-        <div ref={statsRef} className="grid grid-cols-2 gap-4">
+        <div ref={statsRef} className="grid grid-cols-2 gap-3 sm:gap-4">
           {STATS.map((stat) => (
             <div
               key={stat.label}
-              className="border-border/50 bg-card flex flex-col items-center justify-center rounded-xl border p-8 text-center"
+              className="border-border/50 bg-card flex flex-col items-center justify-center rounded-xl border p-5 text-center sm:p-8"
             >
-              <span className="font-heading font-800 text-foreground mb-2 text-4xl tracking-tight md:text-5xl">
+              <span className="font-heading font-800 text-foreground mb-1 text-3xl tracking-tight sm:mb-2 sm:text-4xl md:text-5xl">
                 <CounterAnimation value={stat.value} suffix={stat.suffix} />
               </span>
-              <span className="text-muted-foreground font-mono text-xs tracking-[0.1em] uppercase">
+              <span className="text-muted-foreground font-mono text-[9px] tracking-[0.1em] uppercase sm:text-xs">
                 {stat.label}
               </span>
             </div>

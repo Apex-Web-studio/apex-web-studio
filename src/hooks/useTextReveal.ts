@@ -21,19 +21,20 @@ export function useTextReveal<T extends HTMLElement>(
   options: TextRevealOptions = {},
 ) {
   const ref = useRef<T>(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || hasRun.current) return;
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReducedMotion) return;
 
-    const text = el.textContent || "";
+    hasRun.current = true;
     const splitBy = options.splitBy ?? "words";
-
+    const text = el.textContent || "";
     const units = splitBy === "chars" ? text.split("") : text.split(" ");
 
     el.innerHTML = units
@@ -59,27 +60,16 @@ export function useTextReveal<T extends HTMLElement>(
           : {
               scrollTrigger: {
                 trigger: el,
-                start: options.start ?? "top 85%",
+                start: options.start ?? "top 88%",
                 toggleActions: "play none none none",
               },
             }),
       });
     }, el);
 
-    return () => {
-      ctx.revert();
-      el.textContent = text;
-    };
-  }, [
-    options.splitBy,
-    options.stagger,
-    options.duration,
-    options.delay,
-    options.start,
-    options.ease,
-    options.y,
-    options.onMount,
-  ]);
+    return () => ctx.revert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return ref;
 }

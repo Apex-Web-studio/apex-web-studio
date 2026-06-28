@@ -23,16 +23,18 @@ export function useGsapReveal<T extends HTMLElement>(
   options: RevealOptions = {},
 ) {
   const ref = useRef<T>(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || hasRun.current) return;
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReducedMotion) return;
 
+    hasRun.current = true;
     const targets = options.children ? el.children : el;
     const from: gsap.TweenVars = {
       opacity: options.opacity ?? 0,
@@ -51,25 +53,15 @@ export function useGsapReveal<T extends HTMLElement>(
         force3D: true,
         scrollTrigger: {
           trigger: el,
-          start: options.start ?? "top 85%",
+          start: options.start ?? "top 88%",
           toggleActions: "play none none none",
         },
       });
     }, el);
 
     return () => ctx.revert();
-  }, [
-    options.y,
-    options.x,
-    options.opacity,
-    options.scale,
-    options.duration,
-    options.delay,
-    options.stagger,
-    options.start,
-    options.ease,
-    options.children,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return ref;
 }
