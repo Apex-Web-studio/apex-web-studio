@@ -215,36 +215,40 @@ export function Hero() {
         el.style.backfaceVisibility = "hidden";
       });
 
-      // "X" in APEX — rotateX (horizontal axis, barrel-roll)
+      // "X" in APEX — rotateX (horizontal axis)
+      // Spinning wheel: rest → accelerate → multiple fast spins → decelerate → rest
       if (letterX) {
         const xTl = gsap.timeline({
           repeat: -1,
           repeatDelay: 2,
           delay: 4,
         });
-        // Slow start → fast middle → slow stop (natural momentum)
         xTl
+          // Phase 1: Accelerate from rest (0° → 360°, 1 full rotation while speeding up)
           .to(letterX, {
-            rotateX: 90,
-            duration: 0.6,
-            ease: "power2.in",
+            rotateX: 360,
+            duration: 1.2,
+            ease: "power3.in",
             force3D: true,
           })
+          // Phase 2: Full speed — 4 fast rotations (1440°) at constant velocity
           .to(letterX, {
-            rotateX: 270,
-            duration: 0.3,
+            rotateX: "+=1440",
+            duration: 1.4,
             ease: "none",
             force3D: true,
           })
+          // Phase 3: Decelerate with inertia (1 final rotation winding down)
           .to(letterX, {
-            rotateX: 360,
-            duration: 0.6,
-            ease: "power2.out",
+            rotateX: "+=360",
+            duration: 1.4,
+            ease: "power4.out",
             force3D: true,
           });
       }
 
-      // "I" in STUDIO — rotateY (vertical axis, coin-flip)
+      // "I" in STUDIO — rotateY (vertical axis)
+      // Same spinning wheel physics, offset timing for organic feel
       if (letterI) {
         const iTl = gsap.timeline({
           repeat: -1,
@@ -252,22 +256,25 @@ export function Hero() {
           delay: 5.5,
         });
         iTl
+          // Phase 1: Accelerate from rest
           .to(letterI, {
-            rotateY: 90,
-            duration: 0.6,
-            ease: "power2.in",
+            rotateY: 360,
+            duration: 1.2,
+            ease: "power3.in",
             force3D: true,
           })
+          // Phase 2: Full speed — 4 fast rotations
           .to(letterI, {
-            rotateY: 270,
-            duration: 0.3,
+            rotateY: "+=1440",
+            duration: 1.4,
             ease: "none",
             force3D: true,
           })
+          // Phase 3: Decelerate with inertia
           .to(letterI, {
-            rotateY: 360,
-            duration: 0.6,
-            ease: "power2.out",
+            rotateY: "+=360",
+            duration: 1.4,
+            ease: "power4.out",
             force3D: true,
           });
       }
