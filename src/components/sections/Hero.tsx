@@ -186,23 +186,94 @@ export function Hero() {
       );
 
       // ===================================================
-      // 3D LETTER ROTATIONS (GSAP.com-style)
-      // "X" — rotates on vertical axis (rotateY, coin-flip)
-      // "I" — rotates on horizontal axis (rotateX, barrel-roll)
-      // Pattern: rotate 360°, pause 2s, rotate again — forever
+      // 3D INLINE LETTER ROTATIONS
+      // "X" in "APEX" — rotates on horizontal axis (rotateX)
+      // "I" in "STUDIO" — rotates on vertical axis (rotateY)
+      //
+      // Physics: slow start → accelerate → fast spin → decelerate → stop
+      // Custom ease via keyframes for natural momentum feel
+      // Each letter loops independently with different timing offsets
       // ===================================================
 
-      // "X" — vertical rotation (rotateY)
-      if (floatX.current) {
-        // Rotate-pause-rotate loop using timeline
-        const xLoop = gsap.timeline({ repeat: -1, repeatDelay: 2 });
-        xLoop.to(floatX.current, {
-          rotateY: 360,
-          duration: 3,
-          ease: "power1.inOut",
-          force3D: true,
+      // Find the "X" in "APEX WEB" (line 0, char index 3: A-P-E-X)
+      const line0Chars = lines[0]?.querySelectorAll("[data-char]");
+      const letterX = line0Chars?.[3] as HTMLElement | undefined;
+
+      // Find the "I" in "STUDIO" (line 1, char index 4: S-T-U-D-I)
+      const line1Chars = lines[1]?.querySelectorAll("[data-char]");
+      const letterI = line1Chars?.[4] as HTMLElement | undefined;
+
+      // Apply 3D perspective to both letters' parent overflow wrappers
+      [letterX, letterI].forEach((el) => {
+        if (!el) return;
+        const wrapper = el.parentElement;
+        if (wrapper) {
+          wrapper.style.perspective = "600px";
+          wrapper.style.overflow = "visible";
+        }
+        el.style.transformStyle = "preserve-3d";
+        el.style.backfaceVisibility = "hidden";
+      });
+
+      // "X" in APEX — rotateX (horizontal axis, barrel-roll)
+      if (letterX) {
+        const xTl = gsap.timeline({
+          repeat: -1,
+          repeatDelay: 2,
+          delay: 4,
         });
-        // Gentle float on Y axis
+        // Slow start → fast middle → slow stop (natural momentum)
+        xTl
+          .to(letterX, {
+            rotateX: 90,
+            duration: 0.6,
+            ease: "power2.in",
+            force3D: true,
+          })
+          .to(letterX, {
+            rotateX: 270,
+            duration: 0.3,
+            ease: "none",
+            force3D: true,
+          })
+          .to(letterX, {
+            rotateX: 360,
+            duration: 0.6,
+            ease: "power2.out",
+            force3D: true,
+          });
+      }
+
+      // "I" in STUDIO — rotateY (vertical axis, coin-flip)
+      if (letterI) {
+        const iTl = gsap.timeline({
+          repeat: -1,
+          repeatDelay: 2,
+          delay: 5.5,
+        });
+        iTl
+          .to(letterI, {
+            rotateY: 90,
+            duration: 0.6,
+            ease: "power2.in",
+            force3D: true,
+          })
+          .to(letterI, {
+            rotateY: 270,
+            duration: 0.3,
+            ease: "none",
+            force3D: true,
+          })
+          .to(letterI, {
+            rotateY: 360,
+            duration: 0.6,
+            ease: "power2.out",
+            force3D: true,
+          });
+      }
+
+      // Decorative floating letters gentle drift
+      if (floatX.current) {
         gsap.to(floatX.current, {
           y: -18,
           duration: 3.5,
@@ -212,17 +283,7 @@ export function Hero() {
           force3D: true,
         });
       }
-
-      // "I" — horizontal rotation (rotateX)
       if (floatI.current) {
-        const iLoop = gsap.timeline({ repeat: -1, repeatDelay: 2.5, delay: 1 });
-        iLoop.to(floatI.current, {
-          rotateX: 360,
-          duration: 3,
-          ease: "power1.inOut",
-          force3D: true,
-        });
-        // Gentle float on Y axis (opposite phase)
         gsap.to(floatI.current, {
           y: 18,
           duration: 4,
