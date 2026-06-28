@@ -37,7 +37,7 @@ export function Hero() {
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   const orb1Ref = useRef<HTMLDivElement>(null);
   const orb2Ref = useRef<HTMLDivElement>(null);
-  const floatA = useRef<HTMLSpanElement>(null);
+  const floatI = useRef<HTMLSpanElement>(null);
   const floatX = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -172,7 +172,7 @@ export function Hero() {
 
       // --- Phase 7: Floating decorative letters fade in ---
       master.fromTo(
-        [floatA.current, floatX.current],
+        [floatI.current, floatX.current],
         { opacity: 0, scale: 0.8 },
         {
           opacity: 1,
@@ -186,22 +186,26 @@ export function Hero() {
       );
 
       // ===================================================
-      // INFINITE FLOATING LETTER ROTATION
-      // Rotate slowly, pause, rotate again — forever
+      // 3D LETTER ROTATIONS (GSAP.com-style)
+      // "X" — rotates on vertical axis (rotateY, coin-flip)
+      // "I" — rotates on horizontal axis (rotateX, barrel-roll)
+      // Pattern: rotate 360°, pause 2s, rotate again — forever
       // ===================================================
-      function createRotationLoop(el: HTMLElement | null, direction: number) {
-        if (!el) return;
-        gsap.to(el, {
-          rotation: direction * 360,
-          duration: 20,
-          ease: "none",
-          repeat: -1,
+
+      // "X" — vertical rotation (rotateY)
+      if (floatX.current) {
+        // Rotate-pause-rotate loop using timeline
+        const xLoop = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+        xLoop.to(floatX.current, {
+          rotateY: 360,
+          duration: 3,
+          ease: "power1.inOut",
           force3D: true,
         });
-        // Subtle floating on Y axis
-        gsap.to(el, {
-          y: direction * 15,
-          duration: 3,
+        // Gentle float on Y axis
+        gsap.to(floatX.current, {
+          y: -18,
+          duration: 3.5,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
@@ -209,8 +213,25 @@ export function Hero() {
         });
       }
 
-      createRotationLoop(floatA.current, 1);
-      createRotationLoop(floatX.current, -1);
+      // "I" — horizontal rotation (rotateX)
+      if (floatI.current) {
+        const iLoop = gsap.timeline({ repeat: -1, repeatDelay: 2.5, delay: 1 });
+        iLoop.to(floatI.current, {
+          rotateX: 360,
+          duration: 3,
+          ease: "power1.inOut",
+          force3D: true,
+        });
+        // Gentle float on Y axis (opposite phase)
+        gsap.to(floatI.current, {
+          y: 18,
+          duration: 4,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          force3D: true,
+        });
+      }
 
       // ===================================================
       // SCROLL INDICATOR BOUNCE (infinite, gentle)
@@ -270,20 +291,33 @@ export function Hero() {
         />
       </div>
 
-      {/* ---- Floating decorative letters ---- */}
+      {/* ---- Floating decorative 3D letters ---- */}
       <div
         className="pointer-events-none absolute inset-0 motion-reduce:hidden"
         aria-hidden="true"
+        style={{ perspective: "800px" }}
       >
+        {/* "I" — rotates horizontally (rotateX, barrel-roll) */}
         <span
-          ref={floatA}
-          className="font-heading font-800 text-primary/[0.03] absolute top-[15%] left-[8%] text-[8rem] leading-none opacity-0 will-change-transform select-none sm:text-[12rem] md:left-[12%] md:text-[16rem]"
+          ref={floatI}
+          className="font-heading font-800 text-primary/[0.04] absolute top-[15%] left-[8%] text-[8rem] leading-none opacity-0 select-none sm:text-[12rem] md:left-[12%] md:text-[16rem]"
+          style={{
+            transformStyle: "preserve-3d",
+            backfaceVisibility: "hidden",
+            willChange: "transform",
+          }}
         >
-          A
+          I
         </span>
+        {/* "X" — rotates vertically (rotateY, coin-flip) */}
         <span
           ref={floatX}
-          className="font-heading font-800 text-primary/[0.03] absolute right-[8%] bottom-[18%] text-[8rem] leading-none opacity-0 will-change-transform select-none sm:text-[12rem] md:right-[12%] md:text-[16rem]"
+          className="font-heading font-800 text-primary/[0.04] absolute right-[8%] bottom-[18%] text-[8rem] leading-none opacity-0 select-none sm:text-[12rem] md:right-[12%] md:text-[16rem]"
+          style={{
+            transformStyle: "preserve-3d",
+            backfaceVisibility: "hidden",
+            willChange: "transform",
+          }}
         >
           X
         </span>
