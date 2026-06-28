@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Accordion,
   AccordionContent,
@@ -9,9 +8,22 @@ import {
 } from "@/components/ui/accordion";
 import { SectionWrapper } from "@/components/shared/SectionWrapper";
 import { FAQ_ITEMS } from "@/constants";
-import { fadeInUp, viewportConfig } from "@/lib/animations";
+import { useTextReveal } from "@/hooks/useTextReveal";
+import { useGsapReveal } from "@/hooks/useGsapReveal";
 
 export function FAQ() {
+  const headingRef = useTextReveal<HTMLHeadingElement>({
+    splitBy: "words",
+    stagger: 0.05,
+    duration: 0.8,
+  });
+
+  const accordionRef = useGsapReveal<HTMLDivElement>({
+    y: 40,
+    duration: 0.8,
+    ease: "power3.out",
+  });
+
   return (
     <SectionWrapper id="faq">
       <div className="mx-auto max-w-3xl">
@@ -20,6 +32,7 @@ export function FAQ() {
             FAQ
           </span>
           <h2
+            ref={headingRef}
             className="font-heading font-700 tracking-[-0.02em]"
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
@@ -30,12 +43,7 @@ export function FAQ() {
           </h2>
         </div>
 
-        <motion.div
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-        >
+        <div ref={accordionRef}>
           <Accordion className="w-full">
             {FAQ_ITEMS.map((item, index) => (
               <AccordionItem key={index} className="border-border/50">
@@ -48,7 +56,7 @@ export function FAQ() {
               </AccordionItem>
             ))}
           </Accordion>
-        </motion.div>
+        </div>
       </div>
     </SectionWrapper>
   );

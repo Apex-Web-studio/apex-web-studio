@@ -1,16 +1,53 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Quote } from "lucide-react";
 import { SectionWrapper } from "@/components/shared/SectionWrapper";
 import { TESTIMONIALS } from "@/constants";
-import {
-  staggerContainerSlow,
-  staggerItem,
-  viewportConfig,
-} from "@/lib/animations";
+import { useTextReveal } from "@/hooks/useTextReveal";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function Testimonials() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const headingRef = useTextReveal<HTMLHeadingElement>({
+    splitBy: "words",
+    stagger: 0.05,
+    duration: 0.8,
+  });
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(grid.children, {
+        y: 50,
+        opacity: 0,
+        scale: 0.97,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out",
+        force3D: true,
+        scrollTrigger: {
+          trigger: grid,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <SectionWrapper id="testimonials">
       <div className="mb-16 md:mb-20">
@@ -18,6 +55,7 @@ export function Testimonials() {
           Testimonials
         </span>
         <h2
+          ref={headingRef}
           className="font-heading font-700 max-w-lg tracking-[-0.02em]"
           style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: "1.05" }}
         >
@@ -25,21 +63,17 @@ export function Testimonials() {
         </h2>
       </div>
 
-      <motion.div
-        variants={staggerContainerSlow}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportConfig}
-        className="grid grid-cols-1 gap-6 md:grid-cols-3"
-      >
+      <div ref={gridRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {TESTIMONIALS.map((testimonial) => (
-          <motion.div
+          <div
             key={testimonial.name}
-            variants={staggerItem}
-            className="group border-border/50 bg-card hover:border-primary/20 relative rounded-xl border p-8 transition-colors duration-300"
+            className="group border-border/50 bg-card hover:border-primary/20 relative rounded-xl border p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(103,117,224,0.04)]"
           >
-            <Quote className="text-primary/20 mb-6 h-8 w-8" />
-            <p className="text-muted-foreground mb-8 text-[15px] leading-[1.7]">
+            <Quote
+              className="text-primary/20 mb-6 h-8 w-8"
+              aria-hidden="true"
+            />
+            <p className="text-muted-foreground mb-8 text-sm leading-[1.7] md:text-base">
               &ldquo;{testimonial.quote}&rdquo;
             </p>
             <div className="flex items-center gap-3">
@@ -55,9 +89,9 @@ export function Testimonials() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </SectionWrapper>
   );
 }

@@ -9,8 +9,16 @@ import {
   staggerItem,
   viewportConfig,
 } from "@/lib/animations";
+import { useTextReveal } from "@/hooks/useTextReveal";
 
 export function Work() {
+  const headingRef = useTextReveal<HTMLHeadingElement>({
+    splitBy: "words",
+    stagger: 0.05,
+    duration: 0.8,
+    ease: "power4.out",
+  });
+
   return (
     <SectionWrapper id="work">
       <div className="mb-16 flex flex-col gap-4 md:mb-20 md:flex-row md:items-end md:justify-between">
@@ -19,14 +27,14 @@ export function Work() {
             Selected Work
           </span>
           <h2
+            ref={headingRef}
             className="font-heading font-700 tracking-[-0.02em]"
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               lineHeight: "1.05",
             }}
           >
-            Projects that speak
-            <br className="hidden md:block" /> for themselves.
+            Projects that speak for themselves.
           </h2>
         </div>
         <p className="text-muted-foreground max-w-sm text-base">

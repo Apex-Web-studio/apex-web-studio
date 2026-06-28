@@ -1,38 +1,81 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SectionWrapper } from "@/components/shared/SectionWrapper";
 import { CounterAnimation } from "@/components/shared/CounterAnimation";
 import { STATS, PHILOSOPHY } from "@/constants";
-import {
-  staggerContainer,
-  staggerItem,
-  viewportConfig,
-} from "@/lib/animations";
+import { useTextReveal } from "@/hooks/useTextReveal";
+import { useGsapReveal } from "@/hooks/useGsapReveal";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function WhyApex() {
+  const statsRef = useRef<HTMLDivElement>(null);
+  const bulletRef = useGsapReveal<HTMLDivElement>({
+    y: 30,
+    stagger: 0.08,
+    duration: 0.6,
+    children: true,
+  });
+
+  const headingRef = useTextReveal<HTMLHeadingElement>({
+    splitBy: "words",
+    stagger: 0.05,
+    duration: 0.8,
+  });
+
+  useEffect(() => {
+    const grid = statsRef.current;
+    if (!grid) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(grid.children, {
+        scale: 0.9,
+        opacity: 0,
+        y: 40,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        force3D: true,
+        scrollTrigger: {
+          trigger: grid,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <SectionWrapper id="why-apex">
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
-        {/* Left — narrative */}
         <div>
           <span className="text-primary mb-3 block font-mono text-xs tracking-[0.15em] uppercase">
             Why Apex
           </span>
           <h2
+            ref={headingRef}
             className="font-heading font-700 mb-6 tracking-[-0.02em]"
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               lineHeight: "1.05",
             }}
           >
-            Built on craft,
-            <br /> driven by vision.
+            Built on craft, driven by vision.
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-lg text-[1.0625rem] leading-[1.7]">
+          <p className="text-muted-foreground mb-8 max-w-lg text-base leading-[1.7] md:text-lg">
             {PHILOSOPHY}
           </p>
-          <div className="space-y-4">
+          <div ref={bulletRef} className="space-y-4">
             {[
               "Obsessive attention to every pixel and interaction",
               "Strategy-first approach grounded in real user research",
@@ -47,29 +90,21 @@ export function WhyApex() {
           </div>
         </div>
 
-        {/* Right — stats grid */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          className="grid grid-cols-2 gap-4"
-        >
+        <div ref={statsRef} className="grid grid-cols-2 gap-4">
           {STATS.map((stat) => (
-            <motion.div
+            <div
               key={stat.label}
-              variants={staggerItem}
               className="border-border/50 bg-card flex flex-col items-center justify-center rounded-xl border p-8 text-center"
             >
               <span className="font-heading font-800 text-foreground mb-2 text-4xl tracking-tight md:text-5xl">
                 <CounterAnimation value={stat.value} suffix={stat.suffix} />
               </span>
-              <span className="text-muted-foreground font-mono text-[11px] tracking-[0.1em] uppercase">
+              <span className="text-muted-foreground font-mono text-xs tracking-[0.1em] uppercase">
                 {stat.label}
               </span>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </SectionWrapper>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { LenisProvider } from "@/components/providers/LenisProvider";
 import { PageLoader } from "@/components/shared/PageLoader";
 import { MouseGlow } from "@/components/shared/MouseGlow";
 import { ScrollProgress } from "@/components/shared/ScrollProgress";
@@ -18,23 +19,25 @@ import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <PageLoader>
-      <ScrollProgress />
-      <MouseGlow />
-      <Navigation />
-      <main id="main-content">
-        <Hero />
-        <Marquee />
-        <Work />
-        <Services />
-        <WhyApex />
-        <Process />
-        <Technologies />
-        <Testimonials />
-        <FAQ />
-        <Contact />
-      </main>
-      <Footer />
-    </PageLoader>
+    <LenisProvider>
+      <PageLoader>
+        <ScrollProgress />
+        <MouseGlow />
+        <Navigation />
+        <main id="main-content">
+          <Hero />
+          <Marquee />
+          <Work />
+          <Services />
+          <WhyApex />
+          <Process />
+          <Technologies />
+          <Testimonials />
+          <FAQ />
+          <Contact />
+        </main>
+        <Footer />
+      </PageLoader>
+    </LenisProvider>
   );
 }
