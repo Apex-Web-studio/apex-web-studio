@@ -127,6 +127,9 @@ export function Hero() {
         0.6,
       );
 
+      // Release GPU compositing layers once the blur animation is done
+      master.set(allChars, { filter: "none", willChange: "auto" }, ">");
+
       // --- Phase 4: Tagline slides up and fades in ---
       master.fromTo(
         taglineRef.current,
@@ -151,7 +154,6 @@ export function Hero() {
           y: 0,
           duration: 0.8,
           ease: "power3.out",
-          force3D: true,
         },
         "-=0.5",
       );
@@ -339,7 +341,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 md:px-8"
+      className="relative flex min-h-svh flex-col items-center overflow-hidden px-5 md:px-8"
       aria-label="Hero"
     >
       {/* ---- Background gradient orbs ---- */}
@@ -392,7 +394,7 @@ export function Hero() {
       </div>
 
       {/* ---- Hero content ---- */}
-      <div className="relative z-10 flex flex-col items-center gap-5 text-center sm:gap-6 md:gap-8">
+      <div className="relative z-10 my-auto flex flex-col items-center gap-5 pt-20 text-center sm:gap-6 md:gap-8">
         {/* Eyebrow */}
         <div ref={eyebrowRef} className="flex items-center gap-3">
           <span
@@ -446,7 +448,7 @@ export function Hero() {
       {/* ---- Scroll indicator (GSAP-driven) ---- */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-8 flex flex-col items-center gap-2 opacity-0 sm:bottom-10"
+        className="relative z-10 mb-8 flex flex-col items-center gap-2 opacity-0 sm:mb-10"
         aria-hidden="true"
       >
         <span className="text-muted-foreground font-mono text-xs tracking-[0.08em] uppercase">
